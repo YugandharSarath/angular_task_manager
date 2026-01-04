@@ -1,7 +1,7 @@
 import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 
@@ -13,7 +13,7 @@ import { Task, TaskPriority, TaskFilter } from '../models/task.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, DragDropModule],
+  imports: [CommonModule, FormsModule, DragDropModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css'],
   animations: [
