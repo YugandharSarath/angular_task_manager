@@ -1,0 +1,100 @@
+<div class="min-h-screen p-6 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+    <div class="max-w-3xl mx-auto">
+        <!-- Back Button -->
+        <div class="mb-4">
+            <a routerLink="/dashboard"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow hover:shadow-md transition-shadow">
+                <span>←</span>
+                <span>Back to Dashboard</span>
+            </a>
+        </div>
+
+        <!-- Task Not Found -->
+        @if (taskNotFound()) {
+        <div class="bg-white p-8 rounded-xl shadow-xl text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Task Not Found</h2>
+            <p class="text-gray-600 mb-6">The task you're looking for doesn't exist.</p>
+            <a routerLink="/dashboard"
+                class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Go to Dashboard
+            </a>
+        </div>
+        }
+
+        <!-- Task Detail Card -->
+        @if (task(); as currentTask) {
+        <div class="bg-white p-8 rounded-xl shadow-2xl">
+            <!-- Header -->
+            <div class="flex justify-between items-start mb-6">
+                <div class="flex-1">
+                    @if (!isEditing()) {
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ currentTask.title }}</h1>
+                    <div class="flex items-center gap-3">
+                        <span
+                            [class]="'px-3 py-1 rounded-full text-sm font-semibold border ' + getPriorityBadgeColor(currentTask.priority)">
+                            {{ currentTask.priority | uppercase }}
+                        </span>
+                        <span
+                            [class]="'text-sm font-medium ' + (currentTask.completed ? 'text-green-600' : 'text-gray-500')">
+                            {{ currentTask.completed ? '✓ Completed' : '○ Pending' }}
+                        </span>
+                    </div>
+                    } @else {
+                    <input type="text" [(ngModel)]="editTitle"
+                        class="w-full text-3xl font-bold text-gray-800 border-b-2 border-blue-500 focus:outline-none mb-4"
+                        placeholder="Task title..." />
+                    <div class="flex gap-2">
+                        <select [(ngModel)]="editPriority"
+                            class="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="high">High Priority</option>
+                            <option value="medium">Medium Priority</option>
+                            <option value="low">Low Priority</option>
+                        </select>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Metadata -->
+            <div class="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg mb-6">
+                <div>
+                    <p class="text-sm text-gray-500">Created</p>
+                    <p class="text-gray-800 font-medium">{{ currentTask.createdAt | date:'medium' }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Last Updated</p>
+                    <p class="text-gray-800 font-medium">{{ currentTask.updatedAt | date:'medium' }}</p>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-3 flex-wrap">
+                @if (!isEditing()) {
+                <button (click)="startEdit()"
+                    class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow hover:shadow-md">
+                    Edit Task
+                </button>
+                <button (click)="toggleComplete()"
+                    [class]="'px-6 py-3 rounded-lg transition-colors shadow hover:shadow-md ' + 
+                (currentTask.completed ? 'bg-gray-600 hover:bg-gray-700 text-white' : 'bg-green-600 hover:bg-green-700 text-white')">
+                    {{ currentTask.completed ? 'Mark as Pending' : 'Mark as Complete' }}
+                </button>
+                <button (click)="deleteTask()"
+                    class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow hover:shadow-md">
+                    Delete Task
+                </button>
+                } @else {
+                <button (click)="saveEdit()"
+                    class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow hover:shadow-md">
+                    Save Changes
+                </button>
+                <button (click)="cancelEdit()"
+                    class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors shadow hover:shadow-md">
+                    Cancel
+                </button>
+                }
+            </div>
+        </div>
+        }
+    </div>
+</div>
